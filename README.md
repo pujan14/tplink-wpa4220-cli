@@ -1,6 +1,6 @@
 # tplink-wpa4220-cli
 
-A minimal Python CLI to query and control the **TP-Link TL-WPA4220** powerline Wi-Fi extender — no dependencies, no install, single file.
+A minimal Python CLI to query and control the **TP-Link TL-WPA4220** (AV600 300Mbps Wi-Fi Powerline Extender) — no dependencies, no install, single file.
 
 ```
 $ python3 tplink_wpa.py info
