@@ -4,6 +4,7 @@ TL-WPA4220 CLI — login and query the router via its TDDP protocol.
 
 Usage:
     python3 tplink_wpa.py <password> [command] [args...]
+    python3 tplink_wpa.py --password-file <path> [command] [args...]
     TPLINK_PASSWORD=<password> python3 tplink_wpa.py [command] [args...]
 
 Commands (default: info):
@@ -410,7 +411,12 @@ def main():
         print(__doc__)
         sys.exit(0)
 
-    if "TPLINK_PASSWORD" in os.environ:
+    if len(sys.argv) > 1 and sys.argv[1] == "--password-file":
+        with open(sys.argv[2]) as f:
+            password = f.read().strip()
+        cmd = sys.argv[3] if len(sys.argv) > 3 else "info"
+        args = sys.argv[4:]
+    elif "TPLINK_PASSWORD" in os.environ:
         password = os.environ["TPLINK_PASSWORD"]
         cmd = sys.argv[1] if len(sys.argv) > 1 else "info"
         args = sys.argv[2:]
@@ -419,7 +425,7 @@ def main():
         cmd = sys.argv[2] if len(sys.argv) > 2 else "info"
         args = sys.argv[3:]
     else:
-        print("Error: password required — pass as argument or set TPLINK_PASSWORD env var")
+        print("Error: password required — pass as argument, --password-file <path>, or set TPLINK_PASSWORD env var")
         sys.exit(1)
 
     router = RouterSession()

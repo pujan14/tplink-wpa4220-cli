@@ -74,7 +74,15 @@ TP-Link's web UI stores the admin password in `localStorage['lgkey']` after each
 python3 tplink_wpa.py <password> [command]
 ```
 
-Or set the password via environment variable to keep it out of process listings:
+Or use a password file to keep it out of process listings and shell history:
+
+```sh
+echo 'yourpassword' > ~/.tplink_pass
+chmod 600 ~/.tplink_pass
+python3 tplink_wpa.py --password-file ~/.tplink_pass [command]
+```
+
+Or via environment variable:
 
 ```sh
 export TPLINK_PASSWORD=yourpassword
@@ -125,8 +133,8 @@ python3 tplink_wpa.py info
 Store the password in a file readable only by your user:
 
 ```sh
-echo 'TPLINK_PASSWORD=yourpassword' > ~/.tplink_env
-chmod 600 ~/.tplink_env
+echo 'yourpassword' > ~/.tplink_pass
+chmod 600 ~/.tplink_pass
 ```
 
 ### Crontab
@@ -139,10 +147,10 @@ crontab -e
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Log device info every 5 minutes
-*/5 * * * * . /home/user/.tplink_env && python3 /path/to/tplink_wpa.py info >> /var/log/tplink.log 2>&1
+*/5 * * * * python3 /home/ps/tplink_wpa.py --password-file /home/ps/.tplink_pass info >> /var/log/tplink.log 2>&1
 
 # Nightly reboot at 3 AM
-0 3 * * * . /home/user/.tplink_env && python3 /path/to/tplink_wpa.py reboot >> /var/log/tplink.log 2>&1
+0 3 * * * python3 /home/ps/tplink_wpa.py --password-file /home/ps/.tplink_pass reboot >> /var/log/tplink.log 2>&1
 ```
 
 > The `PATH` line is required — cron uses a minimal environment and may not find `ping` otherwise.
