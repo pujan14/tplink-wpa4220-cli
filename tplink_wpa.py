@@ -413,7 +413,11 @@ def main():
 
     if len(sys.argv) > 1 and sys.argv[1] == "--password-file":
         with open(sys.argv[2]) as f:
-            password = f.read().strip()
+            content = f.read().strip()
+        # Accept plain password or shell assignment (KEY=value / export KEY=value)
+        if "=" in content:
+            content = content.split("=", 1)[1].strip().strip("'\"")
+        password = content
         cmd = sys.argv[3] if len(sys.argv) > 3 else "info"
         args = sys.argv[4:]
     elif "TPLINK_PASSWORD" in os.environ:
