@@ -432,6 +432,7 @@ def main():
         print("Error: password required — pass as argument, --password-file <path>, or set TPLINK_PASSWORD env var")
         sys.exit(1)
 
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}]")
     router = RouterSession()
     try:
         router.connect(password)
